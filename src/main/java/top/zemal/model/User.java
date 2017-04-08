@@ -1,6 +1,7 @@
 package top.zemal.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author zemal-tan
@@ -15,8 +16,15 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "user_name")
-    private Integer userName;
+    @ManyToMany(mappedBy = "users")
+    private Set<UserGroup> userGroups;
+
+    public User() {
+    }
+
+    public User(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -26,11 +34,11 @@ public class User {
         this.userId = userId;
     }
 
-    public Integer getUserName() {
-        return userName;
+    public Set<UserGroup> getUserGroups() {
+        return userGroups;
     }
 
-    public void setUserName(Integer userName) {
-        this.userName = userName;
+    public void setUserGroups(Set<UserGroup> userGroups) {
+        this.userGroups = userGroups;
     }
 }
