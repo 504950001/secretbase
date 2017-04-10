@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.zemal.content.ResponseConstants;
 import top.zemal.content.Responses;
-import top.zemal.dao.BaseRepository;
 import top.zemal.model.User;
 import top.zemal.model.UserGroup;
-import top.zemal.service.BaseService;
 import top.zemal.service.SecretbaseService;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author zemal-tan

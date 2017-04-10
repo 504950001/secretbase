@@ -1,4 +1,4 @@
-package top.zemal.service.baseservice;
+package top.zemal.service;
 
 import org.springframework.stereotype.Service;
 import top.zemal.dao.UserRepository;
@@ -14,5 +14,5 @@ import javax.jws.soap.SOAPBinding;
  **/
 
 @Service
-public class UserBaseService extends BaseService<User, UserRepository> {
+public class UserService extends BaseService<User, UserRepository> {
 }

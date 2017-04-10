@@ -10,15 +10,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.zemal.content.ResponseConstants;
 import top.zemal.content.Responses;
-import top.zemal.dao.BaseRepository;
-import top.zemal.dao.UserRepository;
 import top.zemal.model.User;
-import top.zemal.service.BaseService;
-import top.zemal.service.baseservice.UserBaseService;
+import top.zemal.service.PermissionGroupService;
+import top.zemal.service.PermissionService;
+import top.zemal.service.UserGroupService;
+import top.zemal.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @author zemal-tan
@@ -32,16 +35,40 @@ import java.util.Optional;
 public class BaseController{
 
     @Autowired
-    UserBaseService userBaseService;
+    UserService userBaseService;
 
-    @ApiOperation(value = "根据用户id获取用户", notes = "根据用户id获取用户")
-    @RequestMapping(value = "/A_findUserByUserId", method = RequestMethod.GET)
-    Responses findUserByUserId(
-            @ApiParam(name = "userId", value = "用户id")
-            @RequestParam(name = "userId") Integer userId) {
-        User result = null;
+    @Autowired
+    UserGroupService userGroupService;
+
+    @Autowired
+    PermissionService permissionService;
+
+    @Autowired
+    PermissionGroupService permissionGroupService;
+
+    @ApiOperation(value = "根据主键id获取信息", notes = "根据主键id获取信息，<br>" +
+            "1.用户<br>" +
+            "2.用户组<br>" +
+            "3.权限<br>" +
+            "4.权限组")
+    @RequestMapping(value = "/findObjectByPk", method = RequestMethod.GET)
+    Responses findObjectByPk(
+            @ApiParam(name = "objectId", value = "对象id")
+            @RequestParam(name = "objectId") Integer objectId,
+            @ApiParam(name = "objectType", value = "对象类型")
+            @RequestParam(name = "objectType") Integer objectType) {
+        Object result = null;
         try {
-            result = userBaseService.findObjectByPk(userId);
+            switch (objectType){
+                case 1:
+                    result = userBaseService.findObjectByPk(objectId);break;
+                case 2:
+                    result = userGroupService.findObjectByPk(objectId);break;
+                case 3:
+                    result = permissionService.findObjectByPk(objectId);break;
+                case 4:
+                    result = permissionGroupService.findObjectByPk(objectId);break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,
