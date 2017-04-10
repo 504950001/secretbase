@@ -22,6 +22,10 @@ public class BaseService<T, BASE extends JpaRepository<T, Integer>> {
         return baseRepository.save(objectList);
     }
 
+    public T addObject(T object){
+        return baseRepository.save(object);
+    }
+
     public T findObjectByPk(Integer objectId){
         Optional<T> object = baseRepository.findOne(objectId);
         return object.get();
