@@ -2,10 +2,7 @@ package top.zemal.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.zemal.dao.PermissionGroupRepository;
-import top.zemal.dao.PermissionRepository;
-import top.zemal.dao.UserGroupRepository;
-import top.zemal.dao.UserRepository;
+import top.zemal.dao.*;
 import top.zemal.model.User;
 
 import java.util.ArrayList;

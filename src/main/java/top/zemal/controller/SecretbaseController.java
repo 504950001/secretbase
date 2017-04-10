@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.zemal.content.ResponseConstants;
 import top.zemal.content.Responses;
+import top.zemal.dao.BaseRepository;
 import top.zemal.model.User;
+import top.zemal.model.UserGroup;
+import top.zemal.service.BaseService;
 import top.zemal.service.SecretbaseService;
 
 import java.util.List;
@@ -92,9 +95,9 @@ public class SecretbaseController {
     Responses findUserGroupByUserGroupId(
             @ApiParam(name = "userGroupId", value = "用户组id")
             @RequestParam(name = "userGroupId") Integer userGroupId) {
-        User result = null;
+        UserGroup result = null;
         try {
-//            result = secretbaseService.findUserByUserId(userId);
+//            result = ;
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,

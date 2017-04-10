@@ -12,7 +12,7 @@ import java.util.List;
  * @description
  * @create 2017-03-31 18:14
  **/
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<User, Integer>,BaseRepository<User> {
 
     User findByUserId(Integer userId);
 
