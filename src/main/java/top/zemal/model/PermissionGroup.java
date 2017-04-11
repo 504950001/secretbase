@@ -1,6 +1,7 @@
 package top.zemal.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,13 +25,13 @@ public class PermissionGroup {
     private String permissionGroupDescription;
 
     @ManyToMany(mappedBy = "permissionGroups")
-    private Set<UserGroup> userGroups;
+    private Set<UserGroup> userGroups = new HashSet<UserGroup>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "permission_to_permission_group_tmp",
             joinColumns = {@JoinColumn(name = "from_permission_group_id", referencedColumnName = "permission_group_id")},
             inverseJoinColumns = {@JoinColumn(name = "from_permission_id", referencedColumnName = "permission_id")})
-    private Set<Permission> permissions;
+    private Set<Permission> permissions = new HashSet<Permission>();
 
     public PermissionGroup() {
     }
@@ -73,5 +74,28 @@ public class PermissionGroup {
 
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+
+    /**
+     * 添加权限
+     * @param permission
+     */
+    public void addPermission(Permission permission) {
+        if (!this.permissions.contains(permission)) {
+            this.permissions.add(permission);
+            permission.setPermissionGroups((Set<PermissionGroup>) this);
+        }
+    }
+
+    /**
+     * 删除权限
+     * @param permission
+     */
+    public void removePermission(Permission permission) {
+        if(this.permissions.contains(permission)){
+            permission.setPermissionGroups(null);
+            this.permissions.remove(permission);
+        }
     }
 }

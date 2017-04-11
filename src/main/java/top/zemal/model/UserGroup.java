@@ -1,6 +1,7 @@
 package top.zemal.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,13 +28,13 @@ public class UserGroup {
     @JoinTable(name = "user_group_to_user_tmp",
             joinColumns = {@JoinColumn(name = "from_user_group_id_tmp", referencedColumnName = "user_group_id")},
             inverseJoinColumns = {@JoinColumn(name = "from_user_id", referencedColumnName = "user_id")})
-    private Set<User> users;
+    private Set<User> users = new HashSet<User>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_group_to_permission_group_tmp",
             joinColumns = {@JoinColumn(name = "from_user_group_id", referencedColumnName = "user_group_id")},
             inverseJoinColumns = {@JoinColumn(name = "from_permission_group_id", referencedColumnName = "permission_group_id")})
-    private Set<PermissionGroup> permissionGroups;
+    private Set<PermissionGroup> permissionGroups = new HashSet<PermissionGroup>();
 
     public Integer getUserGroupId() {
         return userGroupId;
@@ -73,5 +74,49 @@ public class UserGroup {
 
     public void setPermissionGroups(Set<PermissionGroup> permissionGroups) {
         this.permissionGroups = permissionGroups;
+    }
+
+    /**
+     * 添加用户
+     * @param user
+     */
+    public void addUser(User user){
+        if (!this.users.contains(user)){
+            this.users.add(user);
+            user.setUserGroups((Set<UserGroup>) this);
+        }
+    }
+
+    /**
+     * 删除用户
+     * @param user
+     */
+    public void removeUser(User user){
+        if (this.users.contains(user)){
+            user.setUserGroups(null);
+            this.users.remove(user);
+        }
+    }
+
+    /**
+     * 添加权限组
+     * @param permissionGroup
+     */
+    public void addPermissionGroup(PermissionGroup permissionGroup){
+        if (!this.permissionGroups.contains(permissionGroup)){
+            this.permissionGroups.add(permissionGroup);
+            permissionGroup.setUserGroups((Set<UserGroup>) this);
+        }
+    }
+
+    /**
+     * 删除权限组
+     * @param permissionGroup
+     */
+    public void removePermissionGroup(PermissionGroup permissionGroup){
+        if (this.permissionGroups.contains(permissionGroup)){
+            permissionGroup.setUserGroups(null);
+            this.permissionGroups.remove(permissionGroup);
+        }
     }
 }

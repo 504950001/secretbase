@@ -84,8 +84,8 @@ public class BaseController{
     }
 
     @ApiOperation(value = "添加新用户", notes = "根据用户id添加新用户")
-    @RequestMapping(value = "/A_addUser", method = RequestMethod.POST)
-    Responses addUser(
+    @RequestMapping(value = "/A_addUsers", method = RequestMethod.POST)
+    Responses addUsers(
             @ApiParam(name = "userIds", value = "用户id数组")
             @RequestParam(name = "userIds") List<Integer> userIds) {
         List<User> result = null;
@@ -108,15 +108,16 @@ public class BaseController{
                 ResponseConstants.CODE_SUCCESS_VALUE, result);
     }
 
-    @ApiOperation(value = "删除用户", notes = "根据用户id删除用户")
-    @RequestMapping(value = "/A_deleteUserByUserId", method = RequestMethod.GET)
-    Responses deleteUserByUserId(
+    @ApiOperation(value = "添加新用户", notes = "根据用户id添加新用户")
+    @RequestMapping(value = "/A_addUser", method = RequestMethod.POST)
+    Responses addUser(
             @ApiParam(name = "userId", value = "用户id")
             @RequestParam(name = "userId") Integer userId) {
-        Boolean result = false;
+        User result = null;
         try {
-            userBaseService.deleteObjectByPk(userId);
-            result = true;
+            User user = new User();
+            user.setUserId(userId);
+            result = userBaseService.addObject(user);
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,

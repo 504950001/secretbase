@@ -1,6 +1,7 @@
 package top.zemal.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,7 +25,7 @@ public class Permission {
     private String permissionDescription;
 
     @ManyToMany(mappedBy = "permissions")
-    private Set<PermissionGroup> permissionGroups;
+    private Set<PermissionGroup> permissionGroups = new HashSet<PermissionGroup>();
 
     public Permission() {
     }

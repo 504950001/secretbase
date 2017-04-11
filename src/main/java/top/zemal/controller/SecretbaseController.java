@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.zemal.content.ResponseConstants;
 import top.zemal.content.Responses;
+import top.zemal.model.PermissionGroup;
 import top.zemal.model.User;
 import top.zemal.model.UserGroup;
-import top.zemal.service.SecretbaseService;
+import top.zemal.service.*;
 
 import java.util.List;
 
@@ -30,14 +31,21 @@ public class SecretbaseController {
     @Autowired
     SecretbaseService secretbaseService;
 
-    @ApiOperation(value = "根据用户id获取用户", notes = "根据用户id获取用户")
-    @RequestMapping(value = "/A_findUserByUserId", method = RequestMethod.GET)
-    Responses findUserByUserId(
-            @ApiParam(name = "userId", value = "用户id")
-            @RequestParam(name = "userId") Integer userId) {
-        User result = null;
+    @ApiOperation(value = "解除关系", notes = "解除关系（不是关系维护者的，需要先手动解除关系）<br>" +
+            "1. 解除用户和用户组的关系<br>" +
+            "2. 解除权限和权限组的关系<br>" +
+            "3. 解除权限组和用户组的关系<br>")
+    @RequestMapping(value = "/A_removeRelationship", method = RequestMethod.POST)
+    Responses removeRelationship(
+            @ApiParam(name = "beforeId", value = "前者对象id")
+            @RequestParam(name = "beforeId") Integer beforeId,
+            @ApiParam(name = "afterId", value = "后者对象id")
+            @RequestParam(name = "afterId") Integer afterId,
+            @ApiParam(name = "objectType", value = "对象类型（对应上面数字1 2 3）")
+            @RequestParam(name = "objectType") Integer objectType) {
+        Boolean result = false;
         try {
-            result = secretbaseService.findUserByUserId(userId);
+            result = secretbaseService.removeRelationship(beforeId, afterId, objectType);
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,
@@ -49,90 +57,17 @@ public class SecretbaseController {
                 ResponseConstants.CODE_SUCCESS_VALUE, result);
     }
 
-    @ApiOperation(value = "添加新用户", notes = "根据用户id添加新用户")
-    @RequestMapping(value = "/A_addUser", method = RequestMethod.POST)
-    Responses addUser(
-            @ApiParam(name = "userIds", value = "用户id数组")
-            @RequestParam(name = "userIds") List<Integer> userIds) {
-        List<User> result = null;
+    @ApiOperation(value = "删除", notes = "删除（如果不是关系维护者，需要先手动解除关系）")
+    @RequestMapping(value = "/B_deleteUserOrPermission", method = RequestMethod.GET)
+    Responses deleteObjectById(
+            @ApiParam(name = "objectId", value = "对象id")
+            @RequestParam(name = "objectId") Integer objectId,
+            @ApiParam(name = "objectType", value = "对象类型（1.用户、2.用户组、3.权限、4.权限组）")
+            @RequestParam(name = "objectType") Integer objectType) {
+        Boolean result = false;
         try {
-            result = secretbaseService.addUsers(userIds);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Responses(ResponseConstants.SUCCESS_FAILED,
-                    ResponseConstants.CODE_FAILED,
-                    ResponseConstants.CODE_FAILED_VALUE, result);
-        }
-        return new Responses(ResponseConstants.SUCCESS_OK,
-                ResponseConstants.CODE_SUCCESS,
-                ResponseConstants.CODE_SUCCESS_VALUE, result);
-    }
-
-    @ApiOperation(value = "删除用户", notes = "根据用户id删除用户")
-    @RequestMapping(value = "/A_deleteUserByUserId", method = RequestMethod.GET)
-    Responses deleteUserByUserId(
-            @ApiParam(name = "userIds", value = "用户id数组")
-            @RequestParam(name = "userId") List<Integer> userIds) {
-        List<User> result = null;
-        try {
-            result = secretbaseService.deleteUserByUserId(userIds);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Responses(ResponseConstants.SUCCESS_FAILED,
-                    ResponseConstants.CODE_FAILED,
-                    ResponseConstants.CODE_FAILED_VALUE, result);
-        }
-        return new Responses(ResponseConstants.SUCCESS_OK,
-                ResponseConstants.CODE_SUCCESS,
-                ResponseConstants.CODE_SUCCESS_VALUE, result);
-    }
-
-    @ApiOperation(value = "获取用户组", notes = "根据用户id获取用户组")
-    @RequestMapping(value = "/B_findUserGroupByUserGroupId", method = RequestMethod.GET)
-    Responses findUserGroupByUserGroupId(
-            @ApiParam(name = "userGroupId", value = "用户组id")
-            @RequestParam(name = "userGroupId") Integer userGroupId) {
-        UserGroup result = null;
-        try {
-//            result = ;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Responses(ResponseConstants.SUCCESS_FAILED,
-                    ResponseConstants.CODE_FAILED,
-                    ResponseConstants.CODE_FAILED_VALUE, result);
-        }
-        return new Responses(ResponseConstants.SUCCESS_OK,
-                ResponseConstants.CODE_SUCCESS,
-                ResponseConstants.CODE_SUCCESS_VALUE, result);
-    }
-
-    @ApiOperation(value = "添加新用户组", notes = "根据用户组id数组添加新用户组")
-    @RequestMapping(value = "/B_addUserGroup", method = RequestMethod.POST)
-    Responses addUserGroup(
-            @ApiParam(name = "userGroupIds", value = "用户组id数组")
-            @RequestParam(name = "userGroupIds") List<Integer> userGroupIds) {
-        List<User> result = null;
-        try {
-//            result = secretbaseService.addUsers(userIds);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Responses(ResponseConstants.SUCCESS_FAILED,
-                    ResponseConstants.CODE_FAILED,
-                    ResponseConstants.CODE_FAILED_VALUE, result);
-        }
-        return new Responses(ResponseConstants.SUCCESS_OK,
-                ResponseConstants.CODE_SUCCESS,
-                ResponseConstants.CODE_SUCCESS_VALUE, result);
-    }
-
-    @ApiOperation(value = "删除用户组", notes = "根据用户组id数组删除用户组")
-    @RequestMapping(value = "/B_deleteUserGroupByUserGroupId", method = RequestMethod.GET)
-    Responses deleteUserGroupByUserGroupId(
-            @ApiParam(name = "userGroupIds", value = "用户组id数组")
-            @RequestParam(name = "userGroupIds") List<Integer> userGroupIds) {
-        List<User> result = null;
-        try {
-
+            secretbaseService.deleteObjectById(objectId, objectType);
+            result = true;
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,

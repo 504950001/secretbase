@@ -1,6 +1,7 @@
 package top.zemal.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,13 +12,13 @@ import java.util.Set;
 @Entity
 @Table(name = "user_tmp")
 public class User {
-    @Id
-    @GeneratedValue
+
+    @Id     //@GeneratedValue  这儿不需要主键自增长策略
     @Column(name = "user_id")
     private Integer userId;
 
     @ManyToMany(mappedBy = "users")
-    private Set<UserGroup> userGroups;
+    private Set<UserGroup> userGroups = new HashSet<UserGroup>();
 
     public User() {
     }
