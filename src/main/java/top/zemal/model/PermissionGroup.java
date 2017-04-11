@@ -1,5 +1,7 @@
 package top.zemal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,9 +26,11 @@ public class PermissionGroup {
     @Column(name = "permission_group_description")
     private String permissionGroupDescription;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "permissionGroups")
     private Set<UserGroup> userGroups = new HashSet<UserGroup>();
 
+//    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "permission_to_permission_group_tmp",
             joinColumns = {@JoinColumn(name = "from_permission_group_id", referencedColumnName = "permission_group_id")},
@@ -84,7 +88,9 @@ public class PermissionGroup {
     public void addPermission(Permission permission) {
         if (!this.permissions.contains(permission)) {
             this.permissions.add(permission);
-            permission.setPermissionGroups((Set<PermissionGroup>) this);
+            Set<PermissionGroup> permissionGroupSet = new HashSet<>();
+            permissionGroupSet.add(this);
+            permission.setPermissionGroups(permissionGroupSet);
         }
     }
 

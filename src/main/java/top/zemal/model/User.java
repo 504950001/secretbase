@@ -1,6 +1,9 @@
 package top.zemal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +20,8 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
-    @ManyToMany(mappedBy = "users")
+//    @JsonIgnore
+    @ManyToMany(mappedBy = "users", fetch=FetchType.LAZY)
     private Set<UserGroup> userGroups = new HashSet<UserGroup>();
 
     public User() {

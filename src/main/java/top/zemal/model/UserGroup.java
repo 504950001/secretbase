@@ -1,6 +1,9 @@
 package top.zemal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,12 +27,14 @@ public class UserGroup {
     @Column(name = "user_group_description")
     private String userGroupDescription;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     @JoinTable(name = "user_group_to_user_tmp",
             joinColumns = {@JoinColumn(name = "from_user_group_id_tmp", referencedColumnName = "user_group_id")},
             inverseJoinColumns = {@JoinColumn(name = "from_user_id", referencedColumnName = "user_id")})
     private Set<User> users = new HashSet<User>();
 
+//    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_group_to_permission_group_tmp",
             joinColumns = {@JoinColumn(name = "from_user_group_id", referencedColumnName = "user_group_id")},
@@ -83,7 +88,9 @@ public class UserGroup {
     public void addUser(User user){
         if (!this.users.contains(user)){
             this.users.add(user);
-            user.setUserGroups((Set<UserGroup>) this);
+            Set<UserGroup> userGroupSet = new HashSet<>();
+            userGroupSet.add(this);
+            user.setUserGroups(userGroupSet);
         }
     }
 
@@ -105,7 +112,9 @@ public class UserGroup {
     public void addPermissionGroup(PermissionGroup permissionGroup){
         if (!this.permissionGroups.contains(permissionGroup)){
             this.permissionGroups.add(permissionGroup);
-            permissionGroup.setUserGroups((Set<UserGroup>) this);
+            Set<UserGroup> userGroupSet = new HashSet<>();
+            userGroupSet.add(this);
+            permissionGroup.setUserGroups(userGroupSet);
         }
     }
 

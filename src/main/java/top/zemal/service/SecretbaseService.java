@@ -49,14 +49,17 @@ public class SecretbaseService{
                 case 1:
                     UserGroup userGroup = userGroupService.findObjectByPk(afterId);
                     userGroup.removeUser(userService.findObjectByPk(beforeId));
+                    userGroupService.addObject(userGroup);
                     break;
                 case 2:
                     PermissionGroup permissionGroup = permissionGroupService.findObjectByPk(afterId);
                     permissionGroup.removePermission(permissionService.findObjectByPk(beforeId));
+                    permissionGroupService.addObject(permissionGroup);
                     break;
                 case 3:
                     UserGroup userGroup2 = userGroupService.findObjectByPk(afterId);
                     userGroup2.removePermissionGroup(permissionGroupService.findObjectByPk(beforeId));
+                    userGroupService.addObject(userGroup2);
                     break;
                 default:
                     throw new Exception("对象类型不是1 2 3中的一个！");
@@ -82,14 +85,17 @@ public class SecretbaseService{
                 case 1:
                     UserGroup userGroup = userGroupService.findObjectByPk(afterId);
                     userGroup.addUser(userService.findObjectByPk(beforeId));
+                    userGroupService.addObject(userGroup);
                     break;
                 case 2:
                     PermissionGroup permissionGroup = permissionGroupService.findObjectByPk(afterId);
                     permissionGroup.addPermission(permissionService.findObjectByPk(beforeId));
+                    permissionGroupService.addObject(permissionGroup);
                     break;
                 case 3:
                     UserGroup userGroup2 = userGroupService.findObjectByPk(afterId);
                     userGroup2.addPermissionGroup(permissionGroupService.findObjectByPk(beforeId));
+                    userGroupService.addObject(userGroup2);
                     break;
                 default:
                     throw new Exception("对象类型不是1 2 3中的一个！");

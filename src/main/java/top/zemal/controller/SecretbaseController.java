@@ -31,6 +31,33 @@ public class SecretbaseController {
     @Autowired
     SecretbaseService secretbaseService;
 
+    @ApiOperation(value = "添加关系", notes = "添加关系（不是关系维护者的，需要先手动添加关系）<br>" +
+            "1. 添加用户和用户组的关系<br>" +
+            "2. 添加权限和权限组的关系<br>" +
+            "3. 添加权限组和用户组的关系<br>" +
+            "例如：将前者对象用户beforeId，添加到后者对象用户组afterId中去")
+    @RequestMapping(value = "/A_addRelationship", method = RequestMethod.POST)
+    Responses addRelationship(
+            @ApiParam(name = "beforeId", value = "前者对象id")
+            @RequestParam(name = "beforeId") Integer beforeId,
+            @ApiParam(name = "afterId", value = "后者对象id")
+            @RequestParam(name = "afterId") Integer afterId,
+            @ApiParam(name = "objectType", value = "对象类型（对应上面数字1 2 3）")
+            @RequestParam(name = "objectType") Integer objectType) {
+        Boolean result = false;
+        try {
+            result = secretbaseService.addRelationship(beforeId, afterId, objectType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Responses(ResponseConstants.SUCCESS_FAILED,
+                    ResponseConstants.CODE_FAILED,
+                    ResponseConstants.CODE_FAILED_VALUE, result);
+        }
+        return new Responses(ResponseConstants.SUCCESS_OK,
+                ResponseConstants.CODE_SUCCESS,
+                ResponseConstants.CODE_SUCCESS_VALUE, result);
+    }
+
     @ApiOperation(value = "解除关系", notes = "解除关系（不是关系维护者的，需要先手动解除关系）<br>" +
             "1. 解除用户和用户组的关系<br>" +
             "2. 解除权限和权限组的关系<br>" +

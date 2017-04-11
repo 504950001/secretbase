@@ -1,5 +1,7 @@
 package top.zemal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +26,7 @@ public class Permission {
     @Column(name = "permission_description")
     private String permissionDescription;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
     private Set<PermissionGroup> permissionGroups = new HashSet<PermissionGroup>();
 

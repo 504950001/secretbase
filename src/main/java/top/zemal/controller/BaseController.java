@@ -38,7 +38,7 @@ import static java.util.stream.Collectors.toSet;
 public class BaseController{
 
     @Autowired
-    UserService userBaseService;
+    UserService userService;
 
     @Autowired
     UserGroupService userGroupService;
@@ -64,7 +64,7 @@ public class BaseController{
         try {
             switch (objectType){
                 case 1:
-                    result = userBaseService.findObjectByPk(objectId);break;
+                    result = userService.findObjectByPk(objectId);break;
                 case 2:
                     result = userGroupService.findObjectByPk(objectId);break;
                 case 3:
@@ -96,7 +96,7 @@ public class BaseController{
                 user.setUserId(userId);
                 userList.add(user);
             }
-            result = userBaseService.addObjects(userList);
+            result = userService.addObjects(userList);
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,
@@ -117,7 +117,7 @@ public class BaseController{
         try {
             User user = new User();
             user.setUserId(userId);
-            result = userBaseService.addObject(user);
+            result = userService.addObject(user);
         } catch (Exception e) {
             e.printStackTrace();
             return new Responses(ResponseConstants.SUCCESS_FAILED,
