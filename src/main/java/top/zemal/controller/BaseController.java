@@ -83,6 +83,38 @@ public class BaseController{
                 ResponseConstants.CODE_SUCCESS_VALUE, result);
     }
 
+    @ApiOperation(value = "根据对象类型获取所有信息", notes = "根据对象类型获取所有信息，类型如下：<br>" +
+            "1.用户<br>" +
+            "2.用户组<br>" +
+            "3.权限<br>" +
+            "4.权限组")
+    @RequestMapping(value = "/findAllByType", method = RequestMethod.GET)
+    Responses findAllByType(
+            @ApiParam(name = "objectType", value = "对象类型")
+            @RequestParam(name = "objectType") Integer objectType) {
+        Object result = null;
+        try {
+            switch (objectType){
+                case 1:
+                    result = userService.findAll();break;
+                case 2:
+                    result = userGroupService.findAll();break;
+                case 3:
+                    result = permissionService.findAll();break;
+                case 4:
+                    result = permissionGroupService.findAll();break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Responses(ResponseConstants.SUCCESS_FAILED,
+                    ResponseConstants.CODE_FAILED,
+                    ResponseConstants.CODE_FAILED_VALUE, result);
+        }
+        return new Responses(ResponseConstants.SUCCESS_OK,
+                ResponseConstants.CODE_SUCCESS,
+                ResponseConstants.CODE_SUCCESS_VALUE, result);
+    }
+
     @ApiOperation(value = "添加新用户", notes = "根据用户id添加新用户")
     @RequestMapping(value = "/A_addUsers", method = RequestMethod.POST)
     Responses addUsers(

@@ -32,6 +32,11 @@ public class BaseService<T, BASE extends JpaRepository<T, Integer>> {
         return object.get();
     }
 
+    public List<T> findAll(){
+        List<T> object = baseRepository.findAll();
+        return object;
+    }
+
     public void deleteObjectByPk(Integer objectId){
         baseRepository.delete(objectId);
     }
