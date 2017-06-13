@@ -3,8 +3,9 @@ package top.zemal.service;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +19,15 @@ public class BaseService<T, BASE extends JpaRepository<T, Integer>> {
 
     @Autowired
     BASE baseRepository;
-    
+
+    @Transactional
     public List<T> addObjects(List<T> objectList){
-        return baseRepository.save(objectList);
+        List<T> tList = new ArrayList<T>();
+        for (T list: objectList){
+            list = baseRepository.save(list);
+            tList.add(list);
+        }
+        return tList;
     }
 
     public T addObject(T object){
@@ -28,7 +35,7 @@ public class BaseService<T, BASE extends JpaRepository<T, Integer>> {
     }
 
     public T findObjectByPk(Integer objectId){
-        Optional<T> object = baseRepository.findOne(objectId);
+        Optional<T> object = baseRepository.findById(objectId);
         return object.get();
     }
 
@@ -38,6 +45,6 @@ public class BaseService<T, BASE extends JpaRepository<T, Integer>> {
     }
 
     public void deleteObjectByPk(Integer objectId){
-        baseRepository.delete(objectId);
+        baseRepository.deleteById(objectId);
     }
 }

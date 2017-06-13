@@ -167,8 +167,6 @@ public class BaseController{
             "3.用户组<br>")
     @RequestMapping(value = "/B_addObject", method = RequestMethod.POST)
     Responses addObject(
-//            @ApiParam(name = "objectId", value = "对象id")
-//            @RequestParam(name = "objectId") Integer objectId,
             @ApiParam(name = "objectName", value = "对象名字（英文）")
             @RequestParam(name = "objectName") String objectName,
             @ApiParam(name = "objectDescription", value = "对象描述")
